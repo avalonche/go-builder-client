@@ -1,4 +1,4 @@
-// Copyright © 2022 Attestant Limited.
+// Copyright © 2023 Attestant Limited.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -24,23 +24,19 @@ import (
 	"github.com/pkg/errors"
 )
 
-type versionJSON struct {
-	Version spec.DataVersion `json:"version"`
+type bellatrixVersionedSubmitBlockRequestJSON struct {
+	Data *bellatrix.SubmitBlockRequest `json:"data"`
+}
+type capellaVersionedSubmitBlockRequestJSON struct {
+	Data *capella.SubmitBlockRequest `json:"data"`
 }
 
-type bellatrixVersionedSignedBuilderBidJSON struct {
-	Data *bellatrix.SignedBuilderBid `json:"data"`
-}
-type capellaVersionedSignedBuilderBidJSON struct {
-	Data *capella.SignedBuilderBid `json:"data"`
-}
-
-type denebVersionedSignedBuilderBidJSON struct {
-	Data *deneb.SignedBuilderBid `json:"data"`
+type denebVersionedSubmitBlockRequestJSON struct {
+	Data *deneb.SubmitBlockRequest `json:"data"`
 }
 
 // MarshalJSON implements json.Marshaler.
-func (v *VersionedSignedBuilderBid) MarshalJSON() ([]byte, error) {
+func (v *VersionedSubmitBlockRequest) MarshalJSON() ([]byte, error) {
 	version := &versionJSON{
 		Version: v.Version,
 	}
@@ -50,36 +46,36 @@ func (v *VersionedSignedBuilderBid) MarshalJSON() ([]byte, error) {
 		if v.Bellatrix == nil {
 			return nil, errors.New("no bellatrix data")
 		}
-		data := &bellatrixVersionedSignedBuilderBidJSON{
+		data := &bellatrixVersionedSubmitBlockRequestJSON{
 			Data: v.Bellatrix,
 		}
 		payload := struct {
 			*versionJSON
-			*bellatrixVersionedSignedBuilderBidJSON
+			*bellatrixVersionedSubmitBlockRequestJSON
 		}{version, data}
 		return json.Marshal(payload)
 	case spec.DataVersionCapella:
 		if v.Capella == nil {
 			return nil, errors.New("no capella data")
 		}
-		data := &capellaVersionedSignedBuilderBidJSON{
+		data := &capellaVersionedSubmitBlockRequestJSON{
 			Data: v.Capella,
 		}
 		payload := struct {
 			*versionJSON
-			*capellaVersionedSignedBuilderBidJSON
+			*capellaVersionedSubmitBlockRequestJSON
 		}{version, data}
 		return json.Marshal(payload)
 	case spec.DataVersionDeneb:
 		if v.Deneb == nil {
 			return nil, errors.New("no deneb data")
 		}
-		data := &denebVersionedSignedBuilderBidJSON{
+		data := &denebVersionedSubmitBlockRequestJSON{
 			Data: v.Deneb,
 		}
 		payload := struct {
 			*versionJSON
-			*denebVersionedSignedBuilderBidJSON
+			*denebVersionedSubmitBlockRequestJSON
 		}{version, data}
 		return json.Marshal(payload)
 	default:
@@ -88,7 +84,7 @@ func (v *VersionedSignedBuilderBid) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (v *VersionedSignedBuilderBid) UnmarshalJSON(input []byte) error {
+func (v *VersionedSubmitBlockRequest) UnmarshalJSON(input []byte) error {
 	var metadata versionJSON
 	if err := json.Unmarshal(input, &metadata); err != nil {
 		return errors.Wrap(err, "invalid JSON")
@@ -96,19 +92,19 @@ func (v *VersionedSignedBuilderBid) UnmarshalJSON(input []byte) error {
 	v.Version = metadata.Version
 	switch metadata.Version {
 	case spec.DataVersionBellatrix:
-		var data bellatrixVersionedSignedBuilderBidJSON
+		var data bellatrixVersionedSubmitBlockRequestJSON
 		if err := json.Unmarshal(input, &data); err != nil {
 			return errors.Wrap(err, "invalid JSON")
 		}
 		v.Bellatrix = data.Data
 	case spec.DataVersionCapella:
-		var data capellaVersionedSignedBuilderBidJSON
+		var data capellaVersionedSubmitBlockRequestJSON
 		if err := json.Unmarshal(input, &data); err != nil {
 			return errors.Wrap(err, "invalid JSON")
 		}
 		v.Capella = data.Data
 	case spec.DataVersionDeneb:
-		var data denebVersionedSignedBuilderBidJSON
+		var data denebVersionedSubmitBlockRequestJSON
 		if err := json.Unmarshal(input, &data); err != nil {
 			return errors.Wrap(err, "invalid JSON")
 		}
