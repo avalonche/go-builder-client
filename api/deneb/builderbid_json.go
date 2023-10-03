@@ -29,18 +29,18 @@ import (
 // builderBidJSON is the spec representation of the struct.
 type builderBidJSON struct {
 	Header             *deneb.ExecutionPayloadHeader `json:"header"`
+	BlindedBlobsBundle *BlindedBlobsBundle           `json:"blinded_blobs_bundle"`
 	Value              string                        `json:"value"`
 	Pubkey             string                        `json:"pubkey"`
-	BlindedBlobsBundle *BlindedBlobsBundle           `json:"blinded_blobs_bundle"`
 }
 
 // MarshalJSON implements json.Marshaler.
 func (b *BuilderBid) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&builderBidJSON{
 		Header:             b.Header,
+		BlindedBlobsBundle: b.BlindedBlobsBundle,
 		Value:              fmt.Sprintf("%d", b.Value),
 		Pubkey:             b.Pubkey.String(),
-		BlindedBlobsBundle: b.BlindedBlobsBundle,
 	})
 }
 

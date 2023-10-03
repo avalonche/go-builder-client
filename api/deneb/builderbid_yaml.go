@@ -24,18 +24,18 @@ import (
 // builderBidYAML is the spec representation of the struct.
 type builderBidYAML struct {
 	Header             *deneb.ExecutionPayloadHeader `yaml:"header"`
+	BlindedBlobsBundle *BlindedBlobsBundle           `yaml:"blinded_blobs_bundle"`
 	Value              *big.Int                      `yaml:"value"`
 	Pubkey             string                        `yaml:"pubkey"`
-	BlindedBlobsBundle *BlindedBlobsBundle           `yaml:"blinded_blobs_bundle"`
 }
 
 // MarshalYAML implements yaml.Marshaler.
 func (b *BuilderBid) MarshalYAML() ([]byte, error) {
 	yamlBytes, err := yaml.MarshalWithOptions(&builderBidYAML{
 		Header:             b.Header,
+		BlindedBlobsBundle: b.BlindedBlobsBundle,
 		Value:              b.Value.ToBig(),
 		Pubkey:             b.Pubkey.String(),
-		BlindedBlobsBundle: b.BlindedBlobsBundle,
 	}, yaml.Flow(true))
 	if err != nil {
 		return nil, err
