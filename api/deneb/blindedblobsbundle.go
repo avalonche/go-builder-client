@@ -23,8 +23,8 @@ import (
 
 // BlindedBlobsBundle is the structure used to store the blobs bundle.
 type BlindedBlobsBundle struct {
-	Commitments []deneb.KzgCommitment `ssz-max:"4096" ssz-size:"?,48"`
-	Proofs      []deneb.KzgProof      `ssz-max:"4096" ssz-size:"?,48"`
+	Commitments []deneb.KZGCommitment `ssz-max:"4096" ssz-size:"?,48"`
+	Proofs      []deneb.KZGProof      `ssz-max:"4096" ssz-size:"?,48"`
 	BlobRoots   []phase0.Root         `ssz-max:"4096" ssz-size:"?,32"`
 }
 

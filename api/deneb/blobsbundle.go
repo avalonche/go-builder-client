@@ -22,8 +22,8 @@ import (
 
 // BlobsBundle is the structure used to store the blobs bundle.
 type BlobsBundle struct {
-	Commitments []deneb.KzgCommitment `ssz-max:"6" ssz-size:"?,48"`
-	Proofs      []deneb.KzgProof      `ssz-max:"6" ssz-size:"?,48"`
+	Commitments []deneb.KZGCommitment `ssz-max:"6" ssz-size:"?,48"`
+	Proofs      []deneb.KZGProof      `ssz-max:"6" ssz-size:"?,48"`
 	Blobs       []deneb.Blob          `ssz-max:"6" ssz-size:"?,131072"`
 }
 
